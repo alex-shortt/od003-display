@@ -1,8 +1,4 @@
-function getRandRange(min, max) {
-    var num = Math.random() * (max - min) + min;
-    return parseInt(num);
-}
-
+/*
 var videos = ["https://dwvo2npct47gg.cloudfront.net/videos/monsterew-cropped.mp4",
               "https://dwvo2npct47gg.cloudfront.net/videos/rocky-1-compressed.mp4",
               "https://dwvo2npct47gg.cloudfront.net/videos/rocky-2.mov",
@@ -10,41 +6,6 @@ var videos = ["https://dwvo2npct47gg.cloudfront.net/videos/monsterew-cropped.mp4
               "https://dwvo2npct47gg.cloudfront.net/videos/rocky-music.mp4",
               "https://dwvo2npct47gg.cloudfront.net/videos/rocky-home.mp4",
               "https://dwvo2npct47gg.cloudfront.net/videos/rocky-jail.mp4"];
-
-var images = ["https://dwvo2npct47gg.cloudfront.net/images/gallery_41.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_40.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_39.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_38.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_37.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_36.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_35.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_34.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_33.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_32.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_31.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_30.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_29.png",
-             "https://dwvo2npct47gg.cloudfront.net/images/gallery_28.png"]
-
-function getIdFromInt(num) {
-    switch (num) {
-    case 1:
-        return "#container-top-left";
-    case 2:
-        return "#container-top-right";
-    case 3:
-        return "#container-bottom-left";
-    case 4:
-        return "#container-bottom-right";
-    default:
-        return null;
-    }
-}
-
-function setOpacity(num, opacity) {
-    var id = getIdFromInt(num);
-    $(id).css("opacity", opacity);
-}
 
 function placeVideo(num, src) {
     var id = getIdFromInt(num);
@@ -54,34 +15,121 @@ function placeVideo(num, src) {
                     </video>\
     ');
 }
+*/
+
+var minSwitchTime = 3500;
+var maxSwitchTime = 5300;
+var lastCellSwitched = 1;
+var urlPrefix = "http://code.bcp.org/students/openHouse/img17/";
+
+function getRandRange(min, max) {
+    var num = Math.random() * (max - min) + min;
+    return parseInt(num);
+}
+
+
+var images = ["Capture.PNG",
+             "IMG_0995.jpg",
+             "IMG_1002.jpg",
+             "IMG_1008.jpg",
+             "apCollab01.jpg",
+             "apCollab02.jpg",
+             "apCollab03.jpg",
+             "apCollab04.jpg",
+             "apCollab05.jpg",
+             "apCollab06.jpg",
+             "apCollab07.jpg",
+             "apclass01.jpg",
+             "cad01.jpg",
+             "cad02.jpg",
+             "cad03.jpg",
+             "cad04.jpg",
+             "capture2.png",
+             "dsCollab02.jpg",
+             "dsCollab03.jpg",
+             "dsCollab05.jpg",
+             "dsPresents01.jpg",
+             "ds_battleship.png",
+             "ds_gia_audio.png",
+             "ds_herb-rosi.png",
+             "ds_joel1.png",
+             "ds_joel2.png",
+             "dsclass01.jpg",
+             "groupChat_Sen.png",
+             "turtleRun_Naza.png",
+             "webDesign_jacob1.png",
+             "webDesign_jacobLic1.png",
+             "webDesign_jared.png",
+             "webappsCollab01.jpg",
+             "webappsCollab02.jpg"];
+
+var animations = ["moveNW",
+                 "moveSW",
+                 "moveNE",
+                 "moveSE",
+                 "none",
+                 "none"];
+
+
+function getIdFromInt(num) {
+    switch (num) {
+        case 1:
+            return "#container-top-left";
+        case 2:
+            return "#container-top-right";
+        case 3:
+            return "#container-bottom-left";
+        case 4:
+            return "#container-bottom-right";
+        default:
+            return null;
+    }
+}
+
+function setOpacity(num, opacity) {
+    var id = getIdFromInt(num);
+    $(id).css("opacity", opacity);
+}
 
 function placeImage(num, src) {
     var id = getIdFromInt(num);
     $(id).empty();
-    $(id).append('\ <div class="image" style="background-image: url(' + src + ');" ></div> ');
+    $(id).append('\ <div class="image" style="background-image: url(' + urlPrefix + src + ');" ></div> ');
+    $(id + " > div").css("animation", getRandRange(25, 100) + "s linear " + animations[getRandRange(0, animations.length)]);
+}
+
+function sourceExists(src) {
+    for (var i = 0; i < $(".content-container > div").length; i++) {
+        var elem = $(".content-container > div")[i];
+        if ($(elem).css("background-image") == 'url("' + src + '")') {
+            return true;
+        }
+    }
+    return false;
 }
 
 function randomChange() {
     var num = getRandRange(0, 5);
+    var src = images[getRandRange(0, images.length)];
 
-    if (getRandRange(0, 2) == 0) {
-        setOpacity(num, 0);
-        setTimeout(function () {
-            placeImage(num, images[getRandRange(0, images.length)]);
-            setOpacity(num, 1);
-            setTimeout(randomChange, getRandRange(5000, 10000));
-        }, 1200);
-    } else {
-        setOpacity(num, 0);
-        setTimeout(function () {
-            placeVideo(num, videos[getRandRange(0, videos.length)]);
-            setOpacity(num, 1);
-            setTimeout(randomChange, getRandRange(5000, 10000));
-        }, 1200);
+    while (num == lastCellSwitched) {
+        num = getRandRange(0, 5);
     }
+    lastCellSwitched = num;
+
+    while (sourceExists(src)) {
+        src = images[getRandRange(0, images.length)];
+    }
+
+    setOpacity(num, 0);
+    setTimeout(function (src) {
+        placeImage(num, src);
+        setOpacity(num, 1);
+        setTimeout(randomChange, getRandRange(minSwitchTime, maxSwitchTime));
+    }, 1200, src);
 }
 
-function setup(){
+function setup() {
     placeImage(1, images[getRandRange(0, images.length)]);
     placeImage(2, images[getRandRange(0, images.length)]);
     placeImage(3, images[getRandRange(0, images.length)]);
